@@ -8,7 +8,7 @@
     "meta-ads-mcp": "./build/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod +x build/index.js",
+    "build": "tsc && node scripts/set-exec-bit.mjs",
     "dev": "tsx watch src/index.ts",
     "test": "node --test build/**/*.test.js",
     "test:watch": "node --test --watch build/**/*.test.js",
