@@ -13,7 +13,7 @@ bun test               # Run tests (Bun test runner)
 bun run test:watch     # Same as test, with --watch
 ```
 
-Tests run against the **compiled** output in `build/`, not `src/`. Always `bun run build` before `bun test`. Test files live in `tests/unit/*.test.ts` and mirror the `src/` folder structure.
+Tests run from `tests/` and import `src/` directly; Bun executes TypeScript without a pre-build. Test files live in `tests/unit/*.test.ts` and mirror the `src/` folder structure.
 
 ## Architecture
 
