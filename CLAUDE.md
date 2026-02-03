@@ -60,7 +60,7 @@ Services use the retry utility (`src/utils/retry.ts` — exponential backoff up 
 - The `facebook-nodejs-business-sdk` has no official types; `src/types/facebook-nodejs-business-sdk.d.ts` is the project's hand-maintained declarations for it.
 - Rate limiting is tracked via Meta's `X-Business-Use-Case-Usage` response header. The `RateLimiter` utility (`src/utils/rate-limiter.ts`) will pause requests when usage approaches the configured threshold (default 80%).
 - PII hashing for Custom Audiences follows Meta's spec: email is lowercased/trimmed before SHA-256, phone must be E.164, etc. See `src/utils/hasher.ts`.
-- `scripts/set-exec-bit.mjs` runs as part of `npm run build` to make `build/index.js` executable on Unix. It's a no-op on Windows.
+- `scripts/set-exec-bit.mjs` runs as part of `bun run build` to make `build/index.js` executable on Unix. It's a no-op on Windows.
 
 ## Environment
 
