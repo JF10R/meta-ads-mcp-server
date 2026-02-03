@@ -9,6 +9,28 @@ import type { MetaCursor } from '../types/meta-ads.types.js';
 import { logger } from '../utils/logger.js';
 
 export class MetaAdsService {
+  private static shared: null | {
+    api: typeof adsSdk.FacebookAdsApi;
+    config: MetaAdsConfig;
+    AdAccount: typeof adsSdk.AdAccount;
+    Campaign: typeof adsSdk.Campaign;
+    AdSet: typeof adsSdk.AdSet;
+    Ad: typeof adsSdk.Ad;
+    AdCreative: typeof adsSdk.AdCreative;
+    AdsPixel: typeof adsSdk.AdsPixel;
+    CustomAudience: typeof adsSdk.CustomAudience;
+    isDebug: boolean;
+  } = null;
+
+  private static sameConfig(a: MetaAdsConfig, b: MetaAdsConfig): boolean {
+    return (
+      a.accessToken === b.accessToken &&
+      a.apiVersion === b.apiVersion &&
+      a.appId === b.appId &&
+      a.appSecret === b.appSecret
+    );
+  }
+
   protected api: typeof adsSdk.FacebookAdsApi;
   protected config: MetaAdsConfig;
   protected readonly AdAccount: typeof adsSdk.AdAccount;
@@ -22,12 +44,42 @@ export class MetaAdsService {
   constructor(config: MetaAdsConfig) {
     this.config = config;
 
+    if (MetaAdsService.shared && MetaAdsService.sameConfig(MetaAdsService.shared.config, config)) {
+      this.api = MetaAdsService.shared.api;
+      this.AdAccount = MetaAdsService.shared.AdAccount;
+      this.Campaign = MetaAdsService.shared.Campaign;
+      this.AdSet = MetaAdsService.shared.AdSet;
+      this.Ad = MetaAdsService.shared.Ad;
+      this.AdCreative = MetaAdsService.shared.AdCreative;
+      this.AdsPixel = MetaAdsService.shared.AdsPixel;
+      this.CustomAudience = MetaAdsService.shared.CustomAudience;
+      return;
+    }
+
+    if (MetaAdsService.shared && !MetaAdsService.sameConfig(MetaAdsService.shared.config, config)) {
+      logger.warn('Meta Ads config changed; reinitializing shared SDK instance', {
+        previousVersion: MetaAdsService.shared.config.apiVersion,
+        requestedVersion: config.apiVersion,
+      });
+    }
+
     // Initialize Facebook Ads API
     this.api = adsSdk.FacebookAdsApi.init(config.accessToken);
 
-    // Set API version if provided
+    // Set API version if supported by SDK (older SDKs expose VERSION only)
     if (config.apiVersion) {
-      this.api.setVersion(config.apiVersion);
+      const apiAny = this.api as unknown as { setVersion?: (version: string) => void };
+      if (typeof apiAny.setVersion === 'function') {
+        apiAny.setVersion(config.apiVersion);
+      } else {
+        const sdkVersion = (adsSdk.FacebookAdsApi as unknown as { VERSION?: string }).VERSION;
+        if (sdkVersion && sdkVersion !== config.apiVersion) {
+          logger.warn('Meta Ads SDK does not support runtime API version override', {
+            requestedVersion: config.apiVersion,
+            sdkVersion,
+          });
+        }
+      }
     }
 
     // Enable debug mode if LOG_LEVEL is debug
@@ -46,8 +98,22 @@ export class MetaAdsService {
     this.AdsPixel = adsSdk.AdsPixel;
     this.CustomAudience = adsSdk.CustomAudience;
 
+    MetaAdsService.shared = {
+      api: this.api,
+      config,
+      AdAccount: this.AdAccount,
+      Campaign: this.Campaign,
+      AdSet: this.AdSet,
+      Ad: this.Ad,
+      AdCreative: this.AdCreative,
+      AdsPixel: this.AdsPixel,
+      CustomAudience: this.CustomAudience,
+      isDebug,
+    };
+
+    const sdkVersion = (adsSdk.FacebookAdsApi as unknown as { VERSION?: string }).VERSION;
     logger.info('Meta Ads Service initialized', {
-      apiVersion: config.apiVersion || 'default',
+      apiVersion: config.apiVersion || sdkVersion || 'default',
       debug: isDebug,
     });
   }
