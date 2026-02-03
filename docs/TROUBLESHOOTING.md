@@ -112,7 +112,7 @@ Solutions for common issues when using the Meta Ads MCP Server.
 
    **Fix:** Rebuild the project
    ```bash
-   npm run build
+   bun run build
    ```
 
 3. **Dependencies not installed:**
@@ -123,8 +123,8 @@ Solutions for common issues when using the Meta Ads MCP Server.
    **Fix:** Reinstall dependencies
    ```bash
    rm -rf node_modules package-lock.json
-   npm install
-   npm run build
+   bun install
+   bun run build
    ```
 
 4. **Environment variables missing:**

@@ -15,8 +15,8 @@ A Model Context Protocol (MCP) server for programmatic management of Meta (Faceb
 ## Installation
 
 ```bash
-npm install
-npm run build
+bun install
+bun run build
 ```
 
 ## Configuration
@@ -41,7 +41,7 @@ Add to your Claude Desktop configuration (`claude_desktop_config.json`):
 {
   "mcpServers": {
     "meta-ads": {
-      "command": "node",
+      "command": "bun",
       "args": ["/path/to/meta-ads-mcp-server/build/index.js"],
       "env": {
         "META_ACCESS_TOKEN": "your_token_here"
@@ -50,6 +50,8 @@ Add to your Claude Desktop configuration (`claude_desktop_config.json`):
   }
 }
 ```
+
+If you prefer Node, set `"command": "node"` and keep the same `args`.
 
 ### With MCP Inspector
 
@@ -61,16 +63,16 @@ npx @modelcontextprotocol/inspector build/index.js
 
 ```bash
 # Watch mode for development
-npm run dev
+bun run dev
 
 # Build
-npm run build
+bun run build
 
 # Run tests
-npm test
+bun test
 
 # Lint
-npm run lint
+bun run lint
 ```
 
 ## Documentation

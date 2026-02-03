@@ -17,7 +17,7 @@ Complete guide to setting up the Meta Ads MCP Server with your Meta (Facebook) d
 Before you begin, ensure you have:
 
 - **Node.js** >= 20.0.0
-- **npm** or **yarn** package manager
+- **Bun** (recommended) or **npm/yarn**
 - A **Meta (Facebook) Developer Account**
 - A **Meta Business Manager** account (for production use)
 - An **Ad Account** with appropriate permissions
@@ -140,13 +140,13 @@ cd meta-ads-mcp-server
 2. **Install dependencies:**
 
 ```bash
-npm install
+bun install
 ```
 
 3. **Build the project:**
 
 ```bash
-npm run build
+bun run build
 ```
 
 ## Configuration
@@ -234,9 +234,9 @@ Edit `claude_desktop_config.json`:
 
 ```json
 {
-  "mcpServers": {
-    "meta-ads": {
-      "command": "node",
+    "mcpServers": {
+      "meta-ads": {
+      "command": "bun",
       "args": ["/absolute/path/to/meta-ads-mcp-server/build/index.js"],
       "env": {
         "META_ACCESS_TOKEN": "your_token_here",
@@ -252,6 +252,7 @@ Edit `claude_desktop_config.json`:
 - Use absolute paths, not relative paths
 - Replace `/absolute/path/to/` with your actual path
 - Never commit this file with your token!
+If you prefer Node, set `"command": "node"` and keep the same `args`.
 
 ### Step 3: Restart Claude Desktop
 
@@ -314,7 +315,7 @@ Create a new campaign in account act_123456789:
 
 **Error: "Server failed to start"**
 - Check that Node.js >= 20 is installed
-- Verify `npm run build` completed successfully
+- Verify `bun run build` completed successfully
 - Check logs for specific error messages
 
 **Claude Desktop doesn't see the server:**

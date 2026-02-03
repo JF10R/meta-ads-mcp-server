@@ -54,9 +54,9 @@ Replace `REPLACE_WITH_YOUR_TOKEN` with your actual token:
 
 ```json
 {
-  "mcpServers": {
-    "meta-ads": {
-      "command": "node",
+    "mcpServers": {
+      "meta-ads": {
+      "command": "bun",
       "args": ["/Users/Gabe/Dev/Meta-Ads-MCP-Server-Gabe/build/index.js"],
       "env": {
         "META_ACCESS_TOKEN": "paste_your_actual_token_here"
@@ -65,6 +65,7 @@ Replace `REPLACE_WITH_YOUR_TOKEN` with your actual token:
   }
 }
 ```
+If you prefer Node, set `"command": "node"` and keep the same `args`.
 
 #### 3. Restart Claude Desktop
 
@@ -121,7 +122,7 @@ Once configured, you'll have access to:
    ```bash
    cd /Users/Gabe/Dev/Meta-Ads-MCP-Server-Gabe
    export META_ACCESS_TOKEN="your_token"
-   node build/index.js
+   bun build/index.js
    ```
 
 3. **Use MCP Inspector:**
