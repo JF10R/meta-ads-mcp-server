@@ -55,6 +55,10 @@ async function main() {
     const hasToken = authConfig !== null;
 
     if (hasToken) {
+      logger.info('Meta access token detected', {
+        length: authConfig.META_ACCESS_TOKEN.length,
+      });
+
       // Create Meta API configuration
       metaConfig = createMetaConfig(authConfig.META_ACCESS_TOKEN, {
         apiVersion: authConfig.META_API_VERSION,
